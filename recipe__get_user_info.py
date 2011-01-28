@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from recipe__oauth_login import oauth_login
 from recipe__make_twitter_request import make_twitter_request
-
-# XXX: TEST ME
 
 # Assume ids have been fetched from a scenario such as the
 # one presented in recipe__get_friends_followers.py and that
 # t is an authenticated instance of twitter.Twitter
 
-def getInfoById(t, ids):
+def get_info_by_id(t, ids):
 
     id_to_info = {}
 
@@ -16,7 +15,7 @@ def getInfoById(t, ids):
 
         # Process 100 ids at a time...
 
-        ids_str, ids = ','.join([str(_id) for _id in ids[:100]])
+        ids_str = ','.join([str(_id) for _id in ids[:100]])
         ids = ids[100:]
 
         response = make_twitter_request(t, 
@@ -38,7 +37,7 @@ def getInfoById(t, ids):
 # using code that's virtually identical. These two functions
 # could easily be combined.
 
-def getInfoByScreenName(t, screen_names):
+def get_info_by_screen_name(t, screen_names):
 
     sn_to_info = {}
 
@@ -63,3 +62,21 @@ def getInfoByScreenName(t, screen_names):
             sn_to_info[user_info['screen_name']] = user_info
 
         return sn_to_info
+
+if __name__ == '__main__':
+
+    # Be sure to pass in any necessary keyword parameters
+    # if you don't have a token already stored on file
+
+    t = oauth_login()
+
+    # Basic usage...
+
+    info = {}
+    info.update(get_info_by_screen_name(t, ['ptwobrussell', 'socialwebmining']))
+    info.update(get_info_by_id(t, ['2384071']))
+
+    # Do something useful with the profile information like store it to disk
+
+    import json
+    print json.dumps(info, indent=1)
