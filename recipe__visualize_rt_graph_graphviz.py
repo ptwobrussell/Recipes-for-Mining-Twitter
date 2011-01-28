@@ -6,17 +6,9 @@ import twitter
 import networkx as nx
 from recipe__create_rt_graph import create_rt_graph
 
-# Your query
-Q = sys.argv[1]
-
-# How many pages of data to grab for the search results
-NUM_PAGES = 5
-
-# How many search results per page
-RESULTS_PER_PAGE = 100
-
 # Writes out a DOT language file that can be converted into an 
 # image by Graphviz
+
 def write_dot_output(g, out_file):
 
     if not os.path.isdir('out'):
@@ -24,7 +16,8 @@ def write_dot_output(g, out_file):
 
     try:
         nx.drawing.write_dot(g, os.path.join('out', out_file + ".dot"))
-        print >> sys.stderr, 'Data file written to: %s' % os.path.join(os.getcwd(), 'out', out_file + ".dot")
+        print >> sys.stderr, 'Data file written to: %s' % \
+                os.path.join(os.getcwd(), 'out', out_file + ".dot")
     except ImportError, e:
 
         # Help for Windows users:
@@ -56,7 +49,7 @@ if __name__ == '__main__':
 
     # How many pages of data to grab for the search results
 
-    NUM_PAGES = 5
+    MAX_PAGES = 5
 
     # How many search results per page
 
@@ -65,9 +58,13 @@ if __name__ == '__main__':
     # Get some search results for a query
 
     twitter_search = twitter.Twitter(domain='search.twitter.com')
+
     search_results = []
-    for page in range(1,NUM_PAGES):
-        search_results.append(twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page))
+    for page in range(1,MAX_PAGES+1):
+
+        search_results.append(
+            twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page)
+        )
 
     all_tweets = [tweet for page in search_results for tweet in page['results']]
 
@@ -77,5 +74,9 @@ if __name__ == '__main__':
 
     # Write Graphviz output
 
-    f = write_dot_output(g, OUT)
-    print >> sys.stderr, 'Try this: $ dot -Tpng -O%s %s.dot' % (OUT, OUT,)
+    if not os.path.isdir('out'):
+        os.mkdir('out')
+
+    f = write_dot_output(g, os.path.join(os.getcwd(), 'out', OUT))
+    print >> sys.stderr, \
+            'Try this on the DOT output: $ dot -Tpng -O%s %s.dot' % (OUT, OUT,)
