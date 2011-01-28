@@ -11,11 +11,17 @@ def create_rt_graph(tweets):
     g = nx.DiGraph()
 
     for tweet in tweets:
+
         rt_origins = get_rt_origins(tweet)
+
         if not rt_origins:
             continue
+
         for rt_origin in rt_origins:
-            g.add_edge(rt_origin.encode('ascii', 'ignore'), tweet['from_user'].encode('ascii', 'ignore'), {'tweet_id': tweet['id']})
+            g.add_edge(rt_origin.encode('ascii', 'ignore'), 
+                       tweet['from_user'].encode('ascii', 'ignore'), 
+                       {'tweet_id': tweet['id']}
+            )
 
     return g
 
@@ -27,7 +33,7 @@ if __name__ == '__main__':
 
     # How many pages of data to grab for the search results
 
-    NUM_PAGES = 5
+    MAX_PAGES = 15
 
     # How many search results per page
 
@@ -37,7 +43,7 @@ if __name__ == '__main__':
 
     twitter_search = twitter.Twitter(domain='search.twitter.com')
     search_results = []
-    for page in range(1,NUM_PAGES):
+    for page in range(1,MAX_PAGES+1):
         search_results.append(twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page))
 
     all_tweets = [tweet for page in search_results for tweet in page['results']]
