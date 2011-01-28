@@ -12,7 +12,7 @@ def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs):
     # for wait_period if the problem is a 503 error. Block until the rate limit is 
     # reset if a rate limiting issue
 
-    def handleTwitterHTTPError(e, t, wait_period=2):
+    def handle_http_error(e, t, wait_period=2):
 
         if wait_period > 3600: # Seconds
             print >> sys.stderr, 'Too many retries. Quitting.'
@@ -45,7 +45,7 @@ def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs):
             return twitterFunction(*args, **kwArgs)
         except twitter.api.TwitterHTTPError, e:
             error_count = 0
-            wait_period = handleTwitterHTTPError(e, t, wait_period)
+            wait_period = handle_http_error(e, t, wait_period)
             if wait_period is None:
                 return
         except URLError, e:
