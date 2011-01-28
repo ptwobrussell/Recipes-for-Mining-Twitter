@@ -6,7 +6,7 @@ import twitter
 import couchdb
 from couchdb.design import ViewDefinition
 from recipe__oauth_login import oauth_login
-from recipe__make_twitter_request import makeTwitterRequest
+from recipe__make_twitter_request import make_twitter_request
 
 
 def usage():
@@ -105,7 +105,7 @@ page_num = 1
 while page_num <= MAX_PAGES:
     KW['page'] = page_num
     api_call = getattr(t.statuses, TIMELINE_NAME + '_timeline')
-    tweets = makeTwitterRequest(t, api_call, **KW)
+    tweets = make_twitter_request(t, api_call, **KW)
     
     # Actually storing tweets in CouchDB is as simple as passing them into a call to db.update
 

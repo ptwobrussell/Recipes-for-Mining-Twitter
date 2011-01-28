@@ -4,9 +4,9 @@ import time
 import twitter
 
 # See recipe__get_friends_followers.py for an example of how you might use 
-# makeTwitterRequest to do something like harvest a bunch of friend ids for a user
+# make_twitter_request to do something like harvest a bunch of friend ids for a user
 
-def makeTwitterRequest(t, twitterFunction, max_errors=3, *args, **kwArgs): 
+def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs): 
 
     # A nested function for handling common HTTPErrors. Return an updated value 
     # for wait_period if the problem is a 503 error. Block until the rate limit is 

@@ -5,7 +5,7 @@
 import sys
 import functools
 import redis
-from recipe__make_twitter_request import makeTwitterRequest
+from recipe__make_twitter_request import make_twitter_request
 from recipe__setwise_operations import getRedisId
 from recipe__oauth_login import oauth_login
 
@@ -21,7 +21,7 @@ def getAllFollowerIds(user_id, limit):
     ids = []
     while cursor != 0:
 
-        response = makeTwitterRequest(t, t.followers.ids, user_id=user_id, cursor=cursor)
+        response = make_twitter_request(t, t.followers.ids, user_id=user_id, cursor=cursor)
         ids += response['ids']
         cursor = response['next_cursor']
 

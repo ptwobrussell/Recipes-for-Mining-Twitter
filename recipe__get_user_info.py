@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from recipe__make_twitter_request import makeTwitterRequest
+from recipe__make_twitter_request import make_twitter_request
 
 # XXX: TEST ME
 
@@ -19,7 +19,7 @@ def getInfoById(t, ids):
         ids_str, ids = ','.join([str(_id) for _id in ids[:100]])
         ids = ids[100:]
 
-        response = makeTwitterRequest(t, 
+        response = make_twitter_request(t, 
                                       getattr(getattr(t, "users"), "lookup"),
                                       user_id=ids_str)
      
@@ -49,7 +49,7 @@ def getInfoByScreenName(t, screen_names):
         screen_names_str = ','.join([str(sn) for sn in screen_names[:100]])
         screen_names = screen_names[100:]
 
-        response = makeTwitterRequest(t, 
+        response = make_twitter_request(t, 
                                       getattr(getattr(t, "users"), "lookup"),
                                       screen_name=screen_names_str)
      

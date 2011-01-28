@@ -5,7 +5,7 @@ import functools
 import twitter
 import locale
 import redis
-from recipe__make_twitter_request import makeTwitterRequest
+from recipe__make_twitter_request import make_twitter_request
 
 # A convenience function for consistently creating keys for a 
 # screen name, user id, or anything else you'd like
@@ -39,13 +39,13 @@ if __name__ == '__main__':
     # Harvest some friend ids
     #############################
 
-    getFriendIds = functools.partial(makeTwitterRequest, t, t.friends.ids)
+    getFriendIds = functools.partial(make_twitter_request, t, t.friends.ids)
 
     cursor = -1
     ids = []
     while cursor != 0:
 
-        # Use makeTwitterRequest via the partially bound callable...
+        # Use make_twitter_request via the partially bound callable...
 
         response = getFriendIds(screen_name=SCREEN_NAME, cursor=cursor)
 
@@ -66,13 +66,13 @@ if __name__ == '__main__':
     # Harvest some follower ids
     #############################
 
-    getFollowerIds = functools.partial(makeTwitterRequest, t, t.followers.ids)
+    getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
 
     cursor = -1
     ids = []
     while cursor != 0:
 
-        # Use makeTwitterRequest via the partially bound callable...
+        # Use make_twitter_request via the partially bound callable...
 
         response = getFollowerIds(screen_name=SCREEN_NAME, cursor=cursor)
 

@@ -2,7 +2,7 @@
 
 import sys
 import twitter
-from recipe__make_twitter_request import makeTwitterRequest
+from recipe__make_twitter_request import make_twitter_request
 import functools
 
 SCREEN_NAME = sys.argv[1]
@@ -15,20 +15,20 @@ if __name__ == '__main__':
 
     t = twitter.Twitter(domain='api.twitter.com', api_version='1')
 
-    # You could call makeTwitterRequest(t, t.friends.ids, *args, **kw) or 
+    # You could call make_twitter_request(t, t.friends.ids, *args, **kw) or 
     # use functools to "partially bind" a new callable with these parameters
 
-    getFriendIds = functools.partial(makeTwitterRequest, t, t.friends.ids)
+    getFriendIds = functools.partial(make_twitter_request, t, t.friends.ids)
 
     # Ditto 
 
-    getFollowerIds = functools.partial(makeTwitterRequest, t, t.followers.ids)
+    getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
 
     cursor = -1
     ids = []
     while cursor != 0:
 
-        # Use makeTwitterRequest via the partially bound callable...
+        # Use make_twitter_request via the partially bound callable...
 
         response = getFriendIds(screen_name=SCREEN_NAME, cursor=cursor)
         ids += response['ids']
