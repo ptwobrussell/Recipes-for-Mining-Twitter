@@ -44,7 +44,9 @@ if __name__ == '__main__':
     twitter_search = twitter.Twitter(domain='search.twitter.com')
     search_results = []
     for page in range(1,MAX_PAGES+1):
-        search_results.append(twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page))
+        search_results.append(
+            twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page)
+        )
 
     all_tweets = [tweet for page in search_results for tweet in page['results']]
 
@@ -56,5 +58,6 @@ if __name__ == '__main__':
 
     print >> sys.stderr, "Number nodes:", g.number_of_nodes()
     print >> sys.stderr, "Num edges:", g.number_of_edges()
-    print >> sys.stderr, "Num connected components:", len(nx.connected_components(g.to_undirected()))
+    print >> sys.stderr, "Num connected components:", 
+                         len(nx.connected_components(g.to_undirected()))
     print >> sys.stderr, "Node degrees:", sorted(nx.degree(g))
