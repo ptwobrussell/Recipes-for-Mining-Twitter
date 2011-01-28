@@ -9,7 +9,8 @@ from math import log
 import couchdb
 from couchdb.design import ViewDefinition
 
-# First, use recipe__harvest_timeline.py to load some data
+# Use recipe__harvest_timeline.py to load some data before running
+# this script. It loads data from CouchDB, not Twitter's API.
 
 DB = sys.argv[1]
 
@@ -23,11 +24,11 @@ db = server[DB]
 
 # Map entities in tweets to the docs that they appear in
 
-def entityCountMapper(doc):
+def entity_count_mapper(doc):
     if not doc.get('entities'):
         import twitter_text
 
-        def getEntities(tweet):
+        def get_entities(tweet):
 
             # Now extract various entities from it and build up a familiar structure
 
@@ -56,7 +57,7 @@ def entityCountMapper(doc):
 
             return entities
 
-        doc['entities'] = getEntities(doc)
+        doc['entities'] = get_entities(doc)
 
     # A mapper can, and often does, include multiple calls to "yield" which 
     # emits a key, value tuple. This tuple can be whatever you'd like. Here,
@@ -74,7 +75,7 @@ def entityCountMapper(doc):
 
 # Count the frequencies of each entity
 
-def summingReducer(keys, values, rereduce):
+def summing_reducer(keys, values, rereduce):
     if rereduce:
         return sum(values)
     else:
@@ -84,8 +85,8 @@ def summingReducer(keys, values, rereduce):
 # Creating a "view" in a "design document" is the mechanism that you use
 # to setup your map/reduce query
 
-view = ViewDefinition('index', 'entity_count_by_doc', entityCountMapper,
-                      reduce_fun=summingReducer, language='python')
+view = ViewDefinition('index', 'entity_count_by_doc', entity_count_mapper,
+                      reduce_fun=summing_reducer, language='python')
 
 view.sync(db)
 
@@ -123,7 +124,7 @@ f = open(os.path.join('out', os.path.basename(HTML_TEMPLATE)), 'w')
 f.write(html_page)
 f.close()
 
-print 'Tagcloud stored in: %s' % f.name
+print >> sys.stderr, 'Tagcloud stored in: %s' % f.name
 
 # Open up the web page in your browser
 
