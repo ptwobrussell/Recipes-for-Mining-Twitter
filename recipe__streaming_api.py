@@ -64,4 +64,6 @@ streaming_api = tweepy.streaming.Stream(auth, CustomStreamListener(), timeout=60
 # Optionally filter the statuses you want to track by providing a list
 # of users to "follow"
 
+print >> sys.stderr, 'Filtering the public timeline for "%s"' % (' '.join(sys.argv[1:]),)
+
 streaming_api.filter(follow=None, track=Q)
