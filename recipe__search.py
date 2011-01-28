@@ -4,7 +4,7 @@ import sys
 import json
 import twitter
 
-Q = sys.argv[1]
+Q = ' '.join(sys.argv[1])
 
 MAX_PAGES = 15
 RESULTS_PER_PAGE = 100

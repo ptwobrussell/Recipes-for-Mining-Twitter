@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # Your query
 
-    Q = sys.argv[1]
+    Q = ' '.join(sys.argv[1])
 
     # Your output
 

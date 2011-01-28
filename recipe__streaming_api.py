@@ -5,6 +5,7 @@ import tweepy
 import webbrowser
 
 # Query terms
+
 Q = sys.argv[1:] 
 
 # Get these values from your application settings
