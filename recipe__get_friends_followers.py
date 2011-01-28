@@ -18,11 +18,11 @@ if __name__ == '__main__':
     # You could call make_twitter_request(t, t.friends.ids, *args, **kw) or 
     # use functools to "partially bind" a new callable with these parameters
 
-    getFriendIds = functools.partial(make_twitter_request, t, t.friends.ids)
+    get_friends_ids = functools.partial(make_twitter_request, t, t.friends.ids)
 
-    # Ditto 
+    # Ditto if you want to do the same thing to get followers...
 
-    getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
+    # getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
 
     cursor = -1
     ids = []
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
         # Use make_twitter_request via the partially bound callable...
 
-        response = getFriendIds(screen_name=SCREEN_NAME, cursor=cursor)
+        response = get_friends_ids(screen_name=SCREEN_NAME, cursor=cursor)
         ids += response['ids']
         cursor = response['next_cursor']
 
