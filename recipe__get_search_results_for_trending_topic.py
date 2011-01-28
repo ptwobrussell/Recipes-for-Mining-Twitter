@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import json
 import twitter
 from recipe__extract_tweet_entities import get_entities
 
-MAX_PAGES = 1
+MAX_PAGES = 15
 RESULTS_PER_PAGE = 100
 
 # Get the trending topics
@@ -43,7 +44,10 @@ for page in range(1,MAX_PAGES+1):
 for result in search_results:
         result['entities'] = get_entities(result)
 
-f = open('search_results.json', 'w')
+if not os.path.isdir('out'):
+        os.mkdir('out')
+
+f = open(os.path.join(os.getcwd(), 'out', 'search_results.json'), 'w')
 f.write(json.dumps(search_results, indent=1))
 f.close()
 
