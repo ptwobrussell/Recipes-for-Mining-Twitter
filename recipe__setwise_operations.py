@@ -10,14 +10,14 @@ from recipe__make_twitter_request import make_twitter_request
 # A convenience function for consistently creating keys for a 
 # screen name, user id, or anything else you'd like
 
-def getRedisId(key_name, screen_name=None, user_id=None):
+def get_redis_id(key_name, screen_name=None, user_id=None):
 
     if screen_name is not None:
         return 'screen_name$' + screen_name + '$' + key_name
     elif user_id is not None:
         return 'user_id$' + user_id + '$' + key_name
     else:
-        raise Exception("No screen_name or user_id provided to getRedisId")
+        raise Exception("No screen_name or user_id provided to get_redis_id")
 
 if __name__ == '__main__':
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
         # Add the ids to the set in redis with the sadd (set add) operator
 
-        rid = getRedisId('friend_ids', screen_name=SCREEN_NAME)
+        rid = get_redis_id('friend_ids', screen_name=SCREEN_NAME)
 
         [ r.sadd(rid, _id) for _id in response['ids'] ]
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
         # Add the ids to the set in redis with the sadd (set add) operator
 
-        rid = getRedisId('follower_ids', screen_name=SCREEN_NAME)
+        rid = get_redis_id('follower_ids', screen_name=SCREEN_NAME)
 
         [ r.sadd(rid, _id) for _id in response['ids'] ]
 
@@ -87,27 +87,27 @@ if __name__ == '__main__':
 
     # Compute setwise operations the data in Redis
 
-    n_friends = r.scard(getRedisId('friend_ids', screen_name=SCREEN_NAME))
+    n_friends = r.scard(get_redis_id('friend_ids', screen_name=SCREEN_NAME))
 
-    n_followers = r.scard(getRedisId('follower_ids', screen_name=SCREEN_NAME))
+    n_followers = r.scard(get_redis_id('follower_ids', screen_name=SCREEN_NAME))
 
     n_friends_diff_followers = r.sdiffstore('temp',
-                                            [getRedisId('friend_ids', 
+                                            [get_redis_id('friend_ids', 
                                             screen_name=SCREEN_NAME),
-                                            getRedisId('follower_ids', 
+                                            get_redis_id('follower_ids', 
                                             screen_name=SCREEN_NAME)])
     r.delete('temp')
 
     n_followers_diff_friends = r.sdiffstore('temp',
-                                            [getRedisId('follower_ids', 
+                                            [get_redis_id('follower_ids', 
                                             screen_name=SCREEN_NAME),
-                                            getRedisId('friend_ids',
+                                            get_redis_id('friend_ids',
                                             screen_name=SCREEN_NAME)])
     r.delete('temp')
 
     n_friends_inter_followers = r.sinterstore('temp',
-            [getRedisId('follower_ids', screen_name=SCREEN_NAME),
-            getRedisId('friend_ids', screen_name=SCREEN_NAME)])
+            [get_redis_id('follower_ids', screen_name=SCREEN_NAME),
+            get_redis_id('friend_ids', screen_name=SCREEN_NAME)])
     r.delete('temp')
 
     print '%s is following %s' % (SCREEN_NAME, locale.format('%d', n_friends, True))

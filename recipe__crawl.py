@@ -1,48 +1,46 @@
 # -*- coding: utf-8 -*-
 
-#XXX: TEST ME
-
 import sys
-import functools
 import redis
 from recipe__make_twitter_request import make_twitter_request
-from recipe__setwise_operations import getRedisId
+from recipe__setwise_operations import get_redis_id
 from recipe__oauth_login import oauth_login
 
-ID = sys.argv[1]
 
-t = oauth_login()
+def crawl_followers(t, r, follower_ids, limit=1000000, depth=2):
 
-r = redis.Redis()
+    # Helper function
 
-def getAllFollowerIds(user_id, limit):
+    def get_all_followers_ids(user_id, limit):
 
-    cursor = -1
-    ids = []
-    while cursor != 0:
+        cursor = -1
+        ids = []
+        while cursor != 0:
 
-        response = make_twitter_request(t, t.followers.ids, user_id=user_id, cursor=cursor)
-        ids += response['ids']
-        cursor = response['next_cursor']
+            response = make_twitter_request(t, t.followers.ids, user_id=user_id, cursor=cursor)
 
-        print >> sys.stderr, 'Fetched %i total ids for %s' % (len(ids), user_id)
+            if response is not None:
+                ids += response['ids']
+                cursor = response['next_cursor']
 
-        # Consider storing the ids to disk during each iteration to provide an 
-        # an additional layer of protection from exceptional circumstances
+            print >> sys.stderr, 'Fetched %i total ids for %s' % (len(ids), user_id)
 
-        if len(ids) >= limit:
-            return ids
+            # Consider storing the ids to disk during each iteration to provide an 
+            # an additional layer of protection from exceptional circumstances
 
-def crawlFollowers(follower_ids, limit=1000000, depth=2):
+            if len(ids) >= limit or response is None:
+                break
+
+        return ids
 
     for fid in follower_ids:
 
-        next_queue = getAllFollowerIds(fid, limit)
+        next_queue = get_all_followers_ids(fid, limit)
 
         # Store a fid => next_queue mapping in Redis or other database of choice
         # In Redis, it might look something like this:
 
-        rid = getRedisId('follower_ids', user_id=fid)
+        rid = get_redis_id('follower_ids', user_id=fid)
         [ r.sadd(rid, _id) for _id in next_queue ]
 
         d = 1
@@ -50,18 +48,31 @@ def crawlFollowers(follower_ids, limit=1000000, depth=2):
             d += 1
             (queue, next_queue) = (next_queue, [])
             for _fid in queue:
-                _follower_ids = getAllFollowerIds(user_id=_fid, limit=limit)
+                _follower_ids = get_all_followers_ids(user_id=_fid, limit=limit)
 
                 # Store a fid => _follower_ids mapping in Redis or other database of choice
                 # In Redis, it might look something like this:
 
-                rid = getRedisId('follower_ids', user_id=fid)
+                rid = get_redis_id('follower_ids', user_id=fid)
                 [ r.sadd(rid, _id) for _id in _follower_ids ] 
 
                 next_queue += _follower_ids
 
-crawlFollowers([ID])
+if __name__ == '__main__':
 
-# The total number of nodes visited represents one measure of potential influence.
-# You can also use the information user => follower id information to create a 
-# graph that can be analyzed.
+    SCREEN_NAME = sys.argv[1]
+
+    # Remember to pass in keyword parameters if you don't have a
+    # token file stored on disk already
+
+    t = oauth_login()
+
+    # Resolve the id for SCREEN_NAME
+
+    _id = str(t.users.show(screen_name=SCREEN_NAME)['id'])
+
+    crawl_followers(t, redis.Redis(), [_id], limit=10)
+
+    # The total number of nodes visited represents one measure of potential influence.
+    # You can also use the user => follower ids information to create a 
+    # graph for analysis
