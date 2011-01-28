@@ -9,15 +9,15 @@ Q = sys.argv[1:]
 
 # Get these values from your application settings
 
-CONSUMER_KEY = ""
-CONSUMER_SECRET = ""
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
 
 # Get these values from the "My Access Token" link located in the
 # margin of your application details, or perform the full OAuth
 # dance
 
-ACCESS_TOKEN = ""
-ACCESS_TOKEN_SECRET = ""
+ACCESS_TOKEN = ''
+ACCESS_TOKEN_SECRET = ''
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -41,7 +41,10 @@ class CustomStreamListener(tweepy.StreamListener):
         # store them elsewhere, retweet select statuses, etc.
 
         try:
-            print "%s\t%s\t%s\t%s" % (status.text, status.author.screen_name, status.created_at, status.source,)
+            print "%s\t%s\t%s\t%s" % (status.text, 
+                                      status.author.screen_name, 
+                                      status.created_at, 
+                                      status.source,)
         except Exception, e:
             print >> sys.stderr, 'Encountered Exception:', e
             pass
@@ -54,7 +57,8 @@ class CustomStreamListener(tweepy.StreamListener):
         print >> sys.stderr, 'Timeout...'
         return True # Don't kill the stream
 
-# Create a streaming API and set a timeout value of 1 minute
+# Create a streaming API and set a timeout value of 60 seconds
+
 streaming_api = tweepy.streaming.Stream(auth, CustomStreamListener(), timeout=60)
 
 # Optionally filter the statuses you want to track by providing a list
