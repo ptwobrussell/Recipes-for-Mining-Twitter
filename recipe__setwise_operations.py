@@ -35,11 +35,9 @@ if __name__ == '__main__':
 
     t = twitter.Twitter(domain='api.twitter.com', api_version='1')
 
-    #############################
     # Harvest some friend ids
-    #############################
 
-    getFriendIds = functools.partial(make_twitter_request, t, t.friends.ids)
+    get_friends_ids = functools.partial(make_twitter_request, t, t.friends.ids)
 
     cursor = -1
     ids = []
@@ -47,7 +45,7 @@ if __name__ == '__main__':
 
         # Use make_twitter_request via the partially bound callable...
 
-        response = getFriendIds(screen_name=SCREEN_NAME, cursor=cursor)
+        response = get_friends_ids(screen_name=SCREEN_NAME, cursor=cursor)
 
         # Add the ids to the set in redis with the sadd (set add) operator
 
@@ -62,11 +60,9 @@ if __name__ == '__main__':
         if r.scard(rid) >= MAX_IDS:
             break
 
-    #############################
     # Harvest some follower ids
-    #############################
 
-    getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
+    get_followers_ids = functools.partial(make_twitter_request, t, t.followers.ids)
 
     cursor = -1
     ids = []
@@ -74,7 +70,7 @@ if __name__ == '__main__':
 
         # Use make_twitter_request via the partially bound callable...
 
-        response = getFollowerIds(screen_name=SCREEN_NAME, cursor=cursor)
+        response = get_followers_ids(screen_name=SCREEN_NAME, cursor=cursor)
 
         # Add the ids to the set in redis with the sadd (set add) operator
 
@@ -89,9 +85,7 @@ if __name__ == '__main__':
         if r.scard(rid) >= MAX_IDS:
             break
 
-    ###################################################
     # Compute setwise operations the data in Redis
-    ###################################################
 
     n_friends = r.scard(getRedisId('friend_ids', screen_name=SCREEN_NAME))
 
