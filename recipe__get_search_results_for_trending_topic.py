@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import json
 import twitter
-from recipe__extract_tweet_entities import getEntities
+from recipe__extract_tweet_entities import get_entities
 
-MAX_PAGES = 15
+MAX_PAGES = 1
 RESULTS_PER_PAGE = 100
+
+# Get the trending topics
 
 t = twitter.Twitter(domain='api.twitter.com', api_version='1')
 
@@ -19,21 +22,29 @@ for trend in trends:
     print '[%i] %s' % (idx, trend,)
     idx += 1
 
+# Prompt the user
+
 trend_idx = int(raw_input('\nPick a trend: '))
 
 q = trends[trend_idx]
 
-print 'Fetching tweets for %s...' % (q, )
+# Search
+
+print >> sys.stderr, 'Fetching tweets for %s...' % (q, )
 
 twitter_search = twitter.Twitter(domain="search.twitter.com")
+
 search_results = []
 for page in range(1,MAX_PAGES+1):
-    search_results += [ twitter_search.search(q=q, rpp=RESULTS_PER_PAGE, page=page) ]
+    search_results += twitter_search.search(q=q, rpp=RESULTS_PER_PAGE, page=page)['results']
 
-for page in search_results:
-    for tweet in page['results']:
-        tweet['entities'] = getEntities(tweet)
+# Exract tweet entities and embed them into search results
+
+for result in search_results:
+        result['entities'] = get_entities(result)
 
 f = open('search_results.json', 'w')
 f.write(json.dumps(search_results, indent=1))
 f.close()
+
+print >> sys.stderr, "Entities for tweets about trend '%s' saved to %s" % (q, f.name,)
