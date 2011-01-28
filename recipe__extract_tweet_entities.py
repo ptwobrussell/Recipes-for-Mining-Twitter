@@ -3,7 +3,7 @@
 import json
 import twitter_text
 
-def getEntities(tweet):
+def get_entities(tweet):
 
     extractor = twitter_text.Extractor(tweet['text'])
 
