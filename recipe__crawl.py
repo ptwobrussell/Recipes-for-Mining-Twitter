@@ -17,7 +17,8 @@ def crawl_followers(t, r, follower_ids, limit=1000000, depth=2):
         ids = []
         while cursor != 0:
 
-            response = make_twitter_request(t, t.followers.ids, user_id=user_id, cursor=cursor)
+            response = make_twitter_request(t, t.followers.ids,
+                                            user_id=user_id, cursor=cursor)
 
             if response is not None:
                 ids += response['ids']
@@ -50,8 +51,8 @@ def crawl_followers(t, r, follower_ids, limit=1000000, depth=2):
             for _fid in queue:
                 _follower_ids = get_all_followers_ids(user_id=_fid, limit=limit)
 
-                # Store a fid => _follower_ids mapping in Redis or other database of choice
-                # In Redis, it might look something like this:
+                # Store a fid => _follower_ids mapping in Redis or other 
+                # database of choice. In Redis, it might look something like this:
 
                 rid = get_redis_id('follower_ids', user_id=fid)
                 [ r.sadd(rid, _id) for _id in _follower_ids ] 

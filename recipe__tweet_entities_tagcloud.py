@@ -120,7 +120,7 @@ html_page = open(HTML_TEMPLATE).read() % \
 if not os.path.isdir('out'):
     os.mkdir('out')
 
-f = open(os.path.join('out', os.path.basename(HTML_TEMPLATE)), 'w')
+f = open(os.path.join(os.getcwd(), 'out', os.path.basename(HTML_TEMPLATE)), 'w')
 f.write(html_page)
 f.close()
 
@@ -128,4 +128,4 @@ print >> sys.stderr, 'Tagcloud stored in: %s' % f.name
 
 # Open up the web page in your browser
 
-webbrowser.open("file://" + os.path.join(os.getcwd(), 'out', os.path.basename(HTML_TEMPLATE)))
+webbrowser.open("file://" + f.name)

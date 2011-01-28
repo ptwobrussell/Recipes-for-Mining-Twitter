@@ -37,7 +37,8 @@ twitter_search = twitter.Twitter(domain="search.twitter.com")
 
 search_results = []
 for page in range(1,MAX_PAGES+1):
-    search_results += twitter_search.search(q=q, rpp=RESULTS_PER_PAGE, page=page)['results']
+    search_results += \
+        twitter_search.search(q=q, rpp=RESULTS_PER_PAGE, page=page)['results']
 
 # Exract tweet entities and embed them into search results
 

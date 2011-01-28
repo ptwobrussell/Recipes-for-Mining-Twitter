@@ -102,10 +102,10 @@ except couchdb.http.PreconditionFailed, e:
         KW['since_id'] = 1
 
 # Harvest tweets for the given timeline.
-# For friend and home timelines, the unofficial limitation is about 800 statuses although
-# other documentation may state otherwise. The public timeline only returns 20 statuses 
-# and gets updated every 60 seconds, so consider using the streaming API for public statuses.
-# See http://groups.google.com/group/twitter-development-talk/browse_thread/thread/4678df70c301be43
+# For friend and home timelines, the unofficial limitation is about 800 statuses 
+# although other documentation may state otherwise. The public timeline only returns
+# 20 statuses and gets updated every 60 seconds, so consider using the streaming API 
+# for public statuses. See http://bit.ly/fgJrAx
 # Note that the count and since_id params have no effect for the public timeline
 
 page_num = 1
@@ -114,7 +114,8 @@ while page_num <= MAX_PAGES:
     api_call = getattr(t.statuses, TIMELINE_NAME + '_timeline')
     tweets = make_twitter_request(t, api_call, **KW)
     
-    # Actually storing tweets in CouchDB is as simple as passing them into a call to db.update
+    # Actually storing tweets in CouchDB is as simple as passing them 
+    # into a call to db.update
 
     db.update(tweets, all_or_nothing=True)
 

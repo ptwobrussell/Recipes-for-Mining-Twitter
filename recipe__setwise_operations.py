@@ -55,7 +55,8 @@ if __name__ == '__main__':
 
         cursor = response['next_cursor']
 
-        print >> sys.stderr, 'Fetched %i total friend ids for %s' % (r.scard(rid), SCREEN_NAME)
+        print >> sys.stderr, \
+            'Fetched %i total friend ids for %s' % (r.scard(rid), SCREEN_NAME)
 
         if r.scard(rid) >= MAX_IDS:
             break
@@ -80,7 +81,8 @@ if __name__ == '__main__':
 
         cursor = response['next_cursor']
 
-        print >> sys.stderr, 'Fetched %i total follower ids for %s' % (r.scard(rid), SCREEN_NAME)
+        print >> sys.stderr, \
+            'Fetched %i total follower ids for %s' % (r.scard(rid), SCREEN_NAME)
 
         if r.scard(rid) >= MAX_IDS:
             break

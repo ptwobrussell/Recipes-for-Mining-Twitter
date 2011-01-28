@@ -126,8 +126,11 @@ shutil.copytree('etc/protovis/dorling_cartogram',
 shutil.copytree('etc/protovis/protovis-3.2',
                 'out/protovis-3.2')
 
-html = open('etc/protovis/dorling_cartogram/dorling_cartogram.html').read() % (json.dumps(json_data),)
-f = open(os.path.join(os.getcwd(), 'out', 'dorling_cartogram', 'dorling_cartogram.html'), 'w')
+html = open('etc/protovis/dorling_cartogram/dorling_cartogram.html').read() % \
+        (json.dumps(json_data),)
+
+f = open(os.path.join(os.getcwd(), 'out', 'dorling_cartogram', 
+                      'dorling_cartogram.html'), 'w')
 f.write(html)
 f.close()
 

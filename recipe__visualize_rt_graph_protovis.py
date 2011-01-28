@@ -29,7 +29,8 @@ def write_protovis_output(g, out_file, html_template):
         links.append({'source' : indexed_nodes[n2], 
                       'target' : indexed_nodes[n1]})
 
-    json_data = json.dumps({"nodes" : [{"nodeName" : n} for n in nodes], "links" : links}, indent=4)
+    json_data = json.dumps({"nodes" : [{"nodeName" : n} for n in nodes], \
+                            "links" : links}, indent=4)
 
     html = open(html_template).read() % (json_data,)
 
@@ -63,7 +64,9 @@ if __name__ == '__main__':
     search_results = []
     for page in range(1,MAX_PAGES+1):
 
-        search_results.append(twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page))
+        search_results.append(twitter_search.search(q=Q, 
+                                                    rpp=RESULTS_PER_PAGE, 
+                                                    page=page))
 
     all_tweets = [  tweet 
                     for page in search_results 
