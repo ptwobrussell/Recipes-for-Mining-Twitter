@@ -1,6 +1,6 @@
 # Overview
 
-This repository contains code for a forthcoming O'Reilly eBook tentatively entitled *21 Recipes for Mining Twitter*. The estimated publication date is the Feb 2, 2011. More information will be posted here as it becomes available.
+This repository contains code for a forthcoming O'Reilly eBook [21 Recipes for Mining Twitter](http://oreilly.com/catalog/0636920018261). More information will be posted here as soon as it becomes available.
 
 # See Also
 
