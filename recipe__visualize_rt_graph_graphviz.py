@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import os
+import sys
 import twitter
 import networkx as nx
 from recipe__create_rt_graph import create_rt_graph
@@ -11,13 +11,9 @@ from recipe__create_rt_graph import create_rt_graph
 
 def write_dot_output(g, out_file):
 
-    if not os.path.isdir('out'):
-        os.mkdir('out')
-
     try:
-        nx.drawing.write_dot(g, os.path.join('out', out_file + ".dot"))
-        print >> sys.stderr, 'Data file written to: %s' % \
-                os.path.join(os.getcwd(), 'out', out_file + ".dot")
+        nx.drawing.write_dot(g, out_file)
+        print >> sys.stderr, 'Data file written to', out_file
     except ImportError, e:
 
         # Help for Windows users:
@@ -35,8 +31,6 @@ def write_dot_output(g, out_file):
 
         print >> sys.stderr, 'Data file written to: %s' % f.name
 
-        return f.name
-
 if __name__ == '__main__':
 
     # Your query
@@ -49,7 +43,7 @@ if __name__ == '__main__':
 
     # How many pages of data to grab for the search results
 
-    MAX_PAGES = 5
+    MAX_PAGES = 15
 
     # How many search results per page
 
@@ -77,6 +71,9 @@ if __name__ == '__main__':
     if not os.path.isdir('out'):
         os.mkdir('out')
 
-    f = write_dot_output(g, os.path.join(os.getcwd(), 'out', OUT))
+    f = os.path.join(os.getcwd(), 'out', OUT)
+
+    write_dot_output(g, f)
+
     print >> sys.stderr, \
-            'Try this on the DOT output: $ dot -Tpng -O%s %s.dot' % (OUT, OUT,)
+            'Try this on the DOT output: $ dot -Tpng -O%s %s.dot' % (f, f,)
