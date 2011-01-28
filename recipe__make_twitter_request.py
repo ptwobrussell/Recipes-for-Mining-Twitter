@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import time
+from urllib2 import URLError
 import twitter
 
 # See recipe__get_friends_followers.py for an example of how you might use 

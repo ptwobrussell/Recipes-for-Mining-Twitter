@@ -7,9 +7,9 @@ import twitter
 from twitter.oauth import write_token_file, read_token_file
 from twitter.oauth_dance import oauth_dance
 
-def oauth_login(app_name, 
-                consumer_key, 
-                consumer_secret, 
+def oauth_login(app_name='',
+                consumer_key='', 
+                consumer_secret='', 
                 token_file='out/twitter.oauth'):
 
     try:

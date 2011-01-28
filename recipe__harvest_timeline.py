@@ -10,7 +10,7 @@ from recipe__make_twitter_request import make_twitter_request
 
 
 def usage():
-    print 'Usage: $ %s timeline_name [max_pages] [user]' % (sys.argv[0], )
+    print 'Usage: $ %s timeline_name [max_pages] [screen_name]' % (sys.argv[0], )
     print
     print '\ttimeline_name in [public, home, user]'
     print '\t0 < max_pages <= 16 for timeline_name in [home, user]'
@@ -18,7 +18,7 @@ def usage():
     print 'Notes:'
     print '\t* ~800 statuses are available from the home timeline.'
     print '\t* ~3200 statuses are available from the user timeline.'
-    print '\t* The public timeline updates once every 60 secs and returns 20 statuses.'
+    print '\t* The public timeline updates every 60 secs and returns 20 statuses.'
     print '\t* See the streaming/search API for additional options to harvest tweets.'
 
     exit()
@@ -45,13 +45,17 @@ KW = {  # For the Twitter API call
 
 if TIMELINE_NAME == 'user':
     USER = sys.argv[3]
-    KW['id'] = USER  # id or screen name
+    KW['screen_name'] = USER
 if TIMELINE_NAME == 'home' and MAX_PAGES > 4:
     MAX_PAGES = 4
 if TIMELINE_NAME == 'user' and MAX_PAGES > 16:
     MAX_PAGES = 16
 if TIMELINE_NAME == 'public':
     MAX_PAGES = 1
+
+# Authentication is needed for harvesting home timelines.
+# Don't forget to add keyword parameters to the oauth_login call below
+# if you don't have a token file on disk.
 
 t = oauth_login()
 
@@ -80,19 +84,22 @@ except couchdb.http.PreconditionFailed, e:
     # For each tweet, emit tuples that can be passed into a reducer to find the maximum
     # tweet value. 
 
-    def idMapper(doc):
+    def id_mapper(doc):
         yield (None, doc['id'])
 
 
     # Find the maximum tweet id
-    def maxFindingReducer(keys, values, rereduce):
+    def max_finding_reducer(keys, values, rereduce):
         return max(values)
 
 
-    view = ViewDefinition('index', 'max_tweet_id', idMapper, maxFindingReducer,
+    view = ViewDefinition('index', 'max_tweet_id', id_mapper, max_finding_reducer,
                           language='python')
     view.sync(db)
-    KW['since_id'] = int([_id for _id in db.view('index/max_tweet_id')][0].value)
+    try:
+        KW['since_id'] = int([_id for _id in db.view('index/max_tweet_id')][0].value)
+    except IndexError, e:
+        KW['since_id'] = 1
 
 # Harvest tweets for the given timeline.
 # For friend and home timelines, the unofficial limitation is about 800 statuses although
@@ -110,7 +117,9 @@ while page_num <= MAX_PAGES:
     # Actually storing tweets in CouchDB is as simple as passing them into a call to db.update
 
     db.update(tweets, all_or_nothing=True)
-    print 'Fetched %i tweets' % len(tweets)
+
+    print >> sys.stderr, 'Fetched %i tweets' % (len(tweets),)
+
     page_num += 1
 
-print 'Done fetching tweets'
+print >> sys.stderr, 'Done fetching tweets'
