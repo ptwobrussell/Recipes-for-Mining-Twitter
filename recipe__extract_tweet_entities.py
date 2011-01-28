@@ -9,6 +9,7 @@ def get_entities(tweet):
 
     # Note: the production Twitter API contains a few additional fields in
     # the entities hash that would require additional API calls to resolve
+    # See API resources that offer the include_entities parameter for details.
 
     entities = {}
     entities['user_mentions'] = []
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     tweets = \
         [
            {
-            'text' : 'RT @ptwobrussell: Generating Dynamic Social Networks from Large Scale Unstructured Data...'
+            'text' : 'Get @SocialWebMining example code at http://bit.ly/biais2 #w00t'
 
             # ... more tweet fields ...
 
@@ -49,6 +50,6 @@ if __name__ == '__main__':
         ]
 
     for tweet in tweets:
-        tweet['entities'] = getEntities(tweet)
+        tweet['entities'] = get_entities(tweet)
 
     print json.dumps(tweets, indent=1)
