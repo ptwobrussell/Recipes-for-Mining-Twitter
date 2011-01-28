@@ -111,7 +111,7 @@ def summarize(txt):
 # be spent here trying to extract the core content, detecting headers, footers, margins,
 # navigation, etc.
 
-def cleanHtml(html):
+def clean_html(html):
     return BeautifulStoneSoup(nltk.clean_html(html),
                               convertEntities=BeautifulStoneSoup.HTML_ENTITIES).contents[0]
 
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     # The good news is that summarize algorithm inherently accounts for handling
     # a lot of this noise.
 
-    clean_page = cleanHtml(page)
+    clean_page = clean_html(page)
 
     summary = summarize(clean_page)
 
