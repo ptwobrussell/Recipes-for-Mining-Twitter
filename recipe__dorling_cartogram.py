@@ -6,7 +6,9 @@ import re
 import shutil
 import json
 import webbrowser
-from recipe__analyze_users_in_search_results import analyzeUsersInSearchResults
+import twitter
+from recipe__oauth_login import oauth_login
+from recipe__analyze_users_in_search_results import analyze_users_in_search_results
 
 # A simple heuristic function that tries to detect the presence of a state
 # in a short blurb of text by searching for the full state name and the
@@ -14,7 +16,7 @@ from recipe__analyze_users_in_search_results import analyzeUsersInSearchResults
 # abbreviations and frequencies. Much more sophisticated alternatives could
 # be applied; this is simply a starting point to get you on your way
 
-def getStateFrequencies(locations):
+def get_state_frequencies(locations):
     
     state_names_to_abbrevs = \
         dict([
@@ -89,13 +91,18 @@ def getStateFrequencies(locations):
 
     return states_freqs
 
-Q = sys.argv[1]
+Q = ' '.join(sys.argv[1:])
 
-_, screen_name_to_location, _ = analyzeUsersInSearchResults(Q)
+# Don't forget to pass in keyword parameters if you don't have
+# a token file stored to disk
+
+t = oauth_login()
+
+_, screen_name_to_location, _ = analyze_users_in_search_results(t, Q)
 locations = screen_name_to_location.values()
 
 # Resolve state abbreviations to the number of times these states appear
-states_freqs = getStateFrequencies(locations)
+states_freqs = get_state_frequencies(locations)
 
 # Munge the data to the format expected by Protovis for Dorling Cartogram
 
