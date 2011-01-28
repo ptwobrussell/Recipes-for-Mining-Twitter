@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     _id = str(t.users.show(screen_name=SCREEN_NAME)['id'])
 
-    crawl_followers(t, redis.Redis(), [_id], limit=10)
+    crawl_followers(t, redis.Redis(), [_id])
 
     # The total number of nodes visited represents one measure of potential influence.
     # You can also use the user => follower ids information to create a 
