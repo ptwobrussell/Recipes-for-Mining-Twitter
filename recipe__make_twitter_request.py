@@ -24,8 +24,8 @@ def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs):
             print >> sys.stderr, 'Encountered 401 Error (Not Authorized)'
             return None
         elif e.e.code in (502, 503):
-            print >> sys.stderr, 'Encountered %i Error. Will retry in %i seconds' % (e.e.code,
-                    wait_period)
+            print >> sys.stderr, 'Encountered %i Error. Will retry in %i seconds' % \
+                    (e.e.code, wait_period)
             time.sleep(wait_period)
             wait_period *= 1.5
             return wait_period
@@ -34,7 +34,8 @@ def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs):
             now = time.time()  # UTC
             when_rate_limit_resets = status['reset_time_in_seconds']  # UTC
             sleep_time = when_rate_limit_resets - now
-            print >> sys.stderr, 'Rate limit reached: sleeping for %i secs' % (sleep_time, )
+            print >> sys.stderr, 'Rate limit reached: sleeping for %i secs' % \
+                    (sleep_time, )
             time.sleep(sleep_time)
             return 2
         else:
