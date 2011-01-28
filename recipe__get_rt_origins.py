@@ -27,3 +27,37 @@ def get_rt_origins(tweet):
     # Filter out any duplicates
 
     return list(set([rto.strip("@").lower() for rto in rt_origins]))
+
+if __name__ == '__main__':
+    
+    # A mocked up array of tweets for purposes of illustration.
+    # Assume tweets have been fetched from the /search resource or elsewhere.
+
+    tweets = \
+        [
+           {
+            'text' : 'RT @ptowbrussell Get @SocialWebMining example code at http://bit.ly/biais2 #w00t'
+
+            # ... more tweet fields ...
+
+           },
+
+           {
+            'text' : 'Get @SocialWebMining example code at http://bit.ly/biais2 #w00t',
+            'retweet_count' : 1,
+            'user' : { 
+             'name' : 'ptwobrussell'
+
+                # ... more user fields ...
+            }
+
+            # ... more tweet fields ...
+
+           },
+ 
+           # ... more tweets ...
+
+        ]
+
+    for tweet in tweets:
+        print get_rt_origins(tweet) 
