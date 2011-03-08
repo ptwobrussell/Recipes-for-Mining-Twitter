@@ -6,6 +6,21 @@ This repository contains code for the [21 Recipes for Mining Twitter](http://ore
 
 You can preview the book [here](http://oreil.ly/gAWVtx) to make sure it's helpful to you before you make a purchase.
 
+# Marketing Description
+
+![cover_art!](https://github.com/ptwobrussell/Recipes-for-Mining-Twitter/raw/master/cover_art.jpg)
+
+Millions of public Twitter streams harbor a wealth of data, and once you mine them, you can gain some valuable insights. This short and concise book offers a collection of recipes to help you extract nuggets of Twitter information using easy-to-learn Python tools. Each recipe offers a discussion of how and why the solution works, so you can quickly adapt it to fit your particular needs. The recipes include techniques to:
+
+- Use OAuth to access Twitter data
+- Create and analyze graphs of retweet relationships
+- Use the streaming API to harvest tweets in realtime
+- Harvest and analyze friends and followers
+- Discover friendship cliques
+- Summarize webpages from short URLs
+
+This book is a perfect companion to [Mining the Social Web](http://amzn.to/d1Ci8A).
+
 # See Also
 
 - [Mining the Social Web (Amazon)](http://amzn.to/d1Ci8A)
