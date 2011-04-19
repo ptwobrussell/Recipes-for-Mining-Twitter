@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 from urllib2 import HTTPError
 import geopy
 from recipe__oauth_login import oauth_login
@@ -19,6 +20,9 @@ def geocode_locations(geocoder, locations):
 
     for location in locations:
 
+        if location is None:
+            continue
+
         # Avoid unnecessary I/O with a simple cache
 
         if location_to_coords.has_key(location):
@@ -33,6 +37,7 @@ def geocode_locations(geocoder, locations):
             while True:
 
                 num_errors = 0
+                results = []
 
                 try:
                     # This call returns a generator
@@ -75,6 +80,45 @@ def geocode_locations(geocoder, locations):
 
     return location_to_coords, location_to_description
 
+
+def build_kml(title, location2coords):
+
+    # There are certainly more robust ways to build XML, ut the following approach
+    # does the job
+
+    # Substitute a title and list of placemarks into the main KML template
+
+    kml_template = """<?xml version="1.0" encoding="UTF-8"?>
+    <kml xmlns="http://earth.google.com/kml/2.0">
+      <Folder>
+        <name>%s</name>
+        %s
+      </Folder>
+    </kml>"""
+
+    # Substitute (name, lon, lat) tuples into placemark templates
+
+    placemark_template = """<Placemark>
+      <Style>
+        <LineStyle>
+          <color>cc0000ff</color>
+          <width>5.0</width>
+        </LineStyle>
+      </Style>
+      <name>%s</name>
+      <Point>
+        <coordinates>%s,%s,0</coordinates>
+      </Point>
+    </Placemark>"""
+
+
+    placemarks = []
+    for name, [lat, lon] in location2coords.items():
+        placemarks += [placemark_template % (name, lon, lat,)]
+
+    return kml_template % (title, '\n'.join(placemarks),)
+
+
 if __name__ == '__main__':
 
     # Use your own API key here if you use a geocoding service
@@ -96,7 +140,18 @@ if __name__ == '__main__':
     # This function returns a few useful maps. Let's use the 
     # screen_name => location map and geocode the locations
 
-    _, screen_name_to_location, _ = analyze_users_in_search_results(t, Q, 2)
+    _, screen_name_to_location, _ = analyze_users_in_search_results(t, Q, max_pages=1)
 
     locations = screen_name_to_location.values()
     location2coords, location2description = geocode_locations(g, locations)
+
+    # Doing something interesting like building up some KML to visualize in Google Earth/Maps 
+    # just involves some simple string munging...
+
+    kml = build_kml("Geocoded user profiles for Twitter search results for " + Q, location2coords)
+
+    if not os.path.isdir('out'):
+        os.mkdir('out')
+    f = open(os.path.join(os.getcwd(), 'out', Q + ".kml"), 'w')
+    f.write(kml)
+    f.close()
