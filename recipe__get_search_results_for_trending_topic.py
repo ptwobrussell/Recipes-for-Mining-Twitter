@@ -15,7 +15,7 @@ t = twitter.Twitter(domain='api.twitter.com', api_version='1')
 
 trends = [ 
             trend['name'] 
-                for trend in t.trends()['trends'] 
+                for trend in t.trends._(1)()[0]['trends'] 
          ]
 
 idx = 0

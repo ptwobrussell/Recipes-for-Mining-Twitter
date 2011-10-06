@@ -16,7 +16,7 @@ while True:
 
     now = str(datetime.datetime.now())
 
-    trends = json.dumps(t.trends(), indent=1)
+    trends = json.dumps(t.trends._(1)(), indent=1)
 
     f = open(os.path.join(os.getcwd(), 'out', 'trends_data', now), 'w')
     f.write(trends)
