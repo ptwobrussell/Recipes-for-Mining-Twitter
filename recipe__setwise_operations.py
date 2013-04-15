@@ -6,6 +6,7 @@ import twitter
 import locale
 import redis
 from recipe__make_twitter_request import make_twitter_request
+from recipe__oauth_login import oauth_login
 
 # A convenience function for consistently creating keys for a 
 # screen name, user id, or anything else you'd like
@@ -24,16 +25,9 @@ if __name__ == '__main__':
     SCREEN_NAME = sys.argv[1]
     MAX_IDS = int(sys.argv[2])
 
-    # Create a client to connect to a running redis-server with default
-    # connection settings. It is recommended that you run Redis in 
-    # "append only mode" -- Search for "appendonly yes" in redis.conf for details.
-
     r = redis.Redis()
 
-    # Not authenticating lowers your rate limit to 150 requests per hr. 
-    # Authenticate to get 350 requests per hour.
-
-    t = twitter.Twitter(domain='api.twitter.com', api_version='1')
+    t = oauth_login()
 
     # Harvest some friend ids
 

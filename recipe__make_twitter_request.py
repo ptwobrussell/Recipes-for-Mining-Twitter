@@ -23,23 +23,24 @@ def make_twitter_request(t, twitterFunction, max_errors=3, *args, **kwArgs):
         if e.e.code == 401:
             print >> sys.stderr, 'Encountered 401 Error (Not Authorized)'
             return None
-        elif e.e.code in (502, 503):
+
+        if e.e.code in (502, 503):
             print >> sys.stderr, 'Encountered %i Error. Will retry in %i seconds' % \
                     (e.e.code, wait_period)
             time.sleep(wait_period)
             wait_period *= 1.5
             return wait_period
-        elif t.account.rate_limit_status()['remaining_hits'] == 0:
-            status = t.account.rate_limit_status()
+
+        # Rate limit exceeded. Wait 15 mins. See https://dev.twitter.com/docs/rate-limiting/1.1/limits
+        if e.e.code == 429: 
             now = time.time()  # UTC
-            when_rate_limit_resets = status['reset_time_in_seconds']  # UTC
-            sleep_time = when_rate_limit_resets - now
-            print >> sys.stderr, 'Rate limit reached: sleeping for %i secs' % \
-                    (sleep_time, )
+            sleep_time = 15*60 # 15 mins
+            print >> sys.stderr, 'Rate limit reached: sleeping for 15 mins'
             time.sleep(sleep_time)
-            return 2
-        else:
-            raise e
+            return 0
+
+        # What else can you do?
+        raise e
 
     wait_period = 2
     error_count = 0

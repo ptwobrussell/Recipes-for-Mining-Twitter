@@ -5,6 +5,8 @@ import sys
 import twitter
 import networkx as nx
 from recipe__create_rt_graph import create_rt_graph
+from recipe__oauth_login import oauth_login
+from recipe__search import search
 
 # Writes out a DOT language file that can be converted into an 
 # image by Graphviz
@@ -33,38 +35,26 @@ def write_dot_output(g, out_file):
 
 if __name__ == '__main__':
 
+    # Your output
+
+    OUT = 'twitter_retweet_graph.dot'
+
     # Your query
 
     Q = ' '.join(sys.argv[1])
 
-    # Your output
+    # How many batches of data to grab for the search results
 
-    OUT = 'twitter_retweet_graph'
-
-    # How many pages of data to grab for the search results
-
-    MAX_PAGES = 15
+    MAX_BATCHES = 2
 
     # How many search results per page
 
-    RESULTS_PER_PAGE = 100
+    COUNT = 100
 
     # Get some search results for a query
-
-    twitter_search = twitter.Twitter(domain='search.twitter.com')
-
-    search_results = []
-    for page in range(1,MAX_PAGES+1):
-
-        search_results.append(
-            twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page)
-        )
-
-    all_tweets = [tweet for page in search_results for tweet in page['results']]
-
-    # Build up a graph data structure
-
-    g = create_rt_graph(all_tweets)
+    t = oauth_login()
+    search_results = search(t, q=Q, max_batches=MAX_BATCHES, count=COUNT)
+    g = create_rt_graph(search_results)
 
     # Write Graphviz output
 
@@ -76,4 +66,4 @@ if __name__ == '__main__':
     write_dot_output(g, f)
 
     print >> sys.stderr, \
-            'Try this on the DOT output: $ dot -Tpng -O%s %s.dot' % (f, f,)
+            'Try this on the DOT output: $ dot -Tpng -O%s %s' % (f, f,)

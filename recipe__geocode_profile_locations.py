@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# XXX: See also https://dev.twitter.com/docs/platform-objects/places
+
 import sys
 import os
 from urllib2 import HTTPError

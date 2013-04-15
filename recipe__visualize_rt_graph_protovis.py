@@ -6,6 +6,8 @@ import json
 import webbrowser
 import twitter
 from recipe__create_rt_graph import create_rt_graph
+from recipe__oauth_login import oauth_login
+from recipe__search import search
 
 # An HTML page that we'll inject Protovis consumable data into
 
@@ -49,33 +51,18 @@ if __name__ == '__main__':
 
     Q = ' '.join(sys.argv[1])
 
-    # How many pages of data to grab for the search results
+    # How many batches of data to grab for the search results
 
-    MAX_PAGES = 15 
+    MAX_BATCHES = 2
 
     # How many search results per page
 
-    RESULTS_PER_PAGE = 100
+    COUNT = 100
 
     # Get some search results for a query
-
-    twitter_search = twitter.Twitter(domain='search.twitter.com')
-
-    search_results = []
-    for page in range(1,MAX_PAGES+1):
-
-        search_results.append(twitter_search.search(q=Q, 
-                                                    rpp=RESULTS_PER_PAGE, 
-                                                    page=page))
-
-    all_tweets = [  tweet 
-                    for page in search_results 
-                        for tweet in page['results']
-                 ]
-
-    # Build up a graph data structure
-
-    g = create_rt_graph(all_tweets)
+    t = oauth_login()
+    search_results = search(t, q=Q, max_batches=MAX_BATCHES, count=COUNT)
+    g = create_rt_graph(search_results)
 
     # Write Protovis output and open in browser
 

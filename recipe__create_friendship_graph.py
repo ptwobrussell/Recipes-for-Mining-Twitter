@@ -5,12 +5,13 @@ import sys
 import networkx as nx
 import redis
 import twitter
+from recipe__oauth_login import oauth_login
 
 from recipe__setwise_operations import get_redis_id
 
 SCREEN_NAME = sys.argv[1]
 
-t = twitter.Twitter(api_version='1', domain='api.twitter.com')
+t = oauth_login()
 
 _id = str(t.users.show(screen_name=SCREEN_NAME)['id'])
 
@@ -28,7 +29,7 @@ ids = [_id] + list(r.smembers(get_redis_id('friend_ids', user_id=_id)))
 
 # Process each id in the collection such that edges are added to the graph
 # for each of current_id's friends if those friends are also
-# friends of SCREEN_NAME. In the end, you get a "hub and spoke" graph of
+# friends of SCREEN_NAME. In the end, you get an ego graph of
 # SCREEN_NAME and SCREEN_NAME's friends, but you also see connections that
 # existing amongst SCREEN_NAME's friends as well
 

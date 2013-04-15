@@ -98,7 +98,7 @@ Q = ' '.join(sys.argv[1:])
 
 t = oauth_login()
 
-_, screen_name_to_location, _ = analyze_users_in_search_results(t, Q)
+_, screen_name_to_location, _ = analyze_users_in_search_results(t, q=Q, max_batches=5, count=100)
 locations = screen_name_to_location.values()
 
 # Resolve state abbreviations to the number of times these states appear

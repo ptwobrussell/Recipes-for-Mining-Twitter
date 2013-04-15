@@ -5,6 +5,8 @@ import json
 import twitter
 import networkx as nx
 from recipe__get_rt_origins import get_rt_origins
+from recipe__search import search
+from recipe__oauth_login import oauth_login
 
 def create_rt_graph(tweets):
 
@@ -19,7 +21,7 @@ def create_rt_graph(tweets):
 
         for rt_origin in rt_origins:
             g.add_edge(rt_origin.encode('ascii', 'ignore'), 
-                       tweet['from_user'].encode('ascii', 'ignore'), 
+                       tweet['user']['screen_name'].encode('ascii', 'ignore'), 
                        {'tweet_id': tweet['id']}
             )
 
@@ -31,33 +33,23 @@ if __name__ == '__main__':
 
     Q = ' '.join(sys.argv[1])
 
-    # How many pages of data to grab for the search results
+    # How many batches of data to grab for the search results
 
-    MAX_PAGES = 15
+    MAX_BATCHES = 2
 
     # How many search results per page
 
-    RESULTS_PER_PAGE = 100
+    COUNT = 100
 
     # Get some search results for a query
-
-    twitter_search = twitter.Twitter(domain='search.twitter.com')
-    search_results = []
-    for page in range(1,MAX_PAGES+1):
-        search_results.append(
-            twitter_search.search(q=Q, rpp=RESULTS_PER_PAGE, page=page)
-        )
-
-    all_tweets = [tweet for page in search_results for tweet in page['results']]
-
-    # Build up a graph data structure
-
-    g = create_rt_graph(all_tweets)
+    t = oauth_login()
+    search_results = search(t, q=Q, max_batches=MAX_BATCHES, count=COUNT)
+    g = create_rt_graph(search_results)
 
     # Print out some stats
 
     print >> sys.stderr, "Number nodes:", g.number_of_nodes()
     print >> sys.stderr, "Num edges:", g.number_of_edges()
-    print >> sys.stderr, "Num connected components:", 
+    print >> sys.stderr, "Num connected components:", \
                          len(nx.connected_components(g.to_undirected()))
     print >> sys.stderr, "Node degrees:", sorted(nx.degree(g))

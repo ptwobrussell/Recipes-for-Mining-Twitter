@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import re
+from recipe__oauth_login import oauth_login
+from recipe__search import search
 
 def get_rt_origins(tweet):
 
@@ -13,9 +15,8 @@ def get_rt_origins(tweet):
     # Inspect the tweet to see if was produced with /statuses/retweet/:id
     # See http://dev.twitter.com/doc/post/statuses/retweet/:id
     
-    if tweet.has_key('retweet_count'):
-        if tweet['retweet_count'] > 0:
-            rt_origins += [ tweet['user']['name'].lower() ]
+    if tweet.has_key('retweeted_status'):
+        rt_origins += [ tweet['retweeted_status']['user']['screen_name'].lower() ]
 
     # Also, inspect the tweet for the presence of "legacy" retweet 
     # patterns such as "RT" and "via"
@@ -33,35 +34,10 @@ def get_rt_origins(tweet):
     return list(set([rto.strip("@").lower() for rto in rt_origins]))
 
 if __name__ == '__main__':
-    
-    # A mocked up array of tweets for purposes of illustration.
-    # Assume tweets have been fetched from the /search resource or elsewhere.
 
-    tweets = \
-    [
-       {
-        'text' : 'RT @ptowbrussell Get @SocialWebMining at http://bit.ly/biais2 #w00t'
+    t = oauth_login()
+    tweets = search(t, q='Python', max_batches=1, count=100)
 
-        # ... more tweet fields ...
-
-       },
-
-       {
-        'text' : 'Get @SocialWebMining example code at http://bit.ly/biais2 #w00t',
-        'retweet_count' : 1,
-        'user' : { 
-         'name' : 'ptwobrussell'
-
-            # ... more user fields ...
-        }
-
-        # ... more tweet fields ...
-
-       },
-
-       # ... more tweets ...
-
-    ]
 
     for tweet in tweets:
-        print get_rt_origins(tweet) 
+        print tweet['text'], get_rt_origins(tweet) 

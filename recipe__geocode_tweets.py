@@ -3,27 +3,15 @@
 import sys
 import twitter
 from recipe__oauth_login import oauth_login
+from recipe__search import search
 
 Q = ' '.join(sys.argv[1:])
 
-def get_search_results(t, q, max_pages=15, results_per_page=100):
-
-    # Search for something
-
-    search_api = twitter.Twitter(domain="search.twitter.com")
-    search_results = []
-    for page in range(1,max_pages+1):
-        search_results += \
-            search_api.search(q=q, rpp=results_per_page, page=page)['results']
-
-    return search_results
-
 t = oauth_login()
-
-search_results = get_search_results(t, Q, max_pages=2)
+statuses = search(t, q=Q, max_batches=10, count=100)
 
 # Extract geocoordinates from tweets in search results
 
-coords =  [ t['geo'] for t in search_results if t['geo'] is not None ]
+coords =  [ status['geo'] for status in statuses if status['geo'] is not None ]
 
 print coords

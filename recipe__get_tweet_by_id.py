@@ -3,10 +3,11 @@
 import sys
 import json
 import twitter
+from recipe__oauth_login import oauth_login
 
 TWEET_ID = sys.argv[1] # Example: 24877908333961216
 
-t = twitter.Twitter(domain='api.twitter.com', api_version='1')
+t = oauth_login()
 
 # No authentication required, but rate limiting is enforced
 

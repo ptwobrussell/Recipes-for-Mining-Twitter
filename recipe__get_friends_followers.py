@@ -20,9 +20,9 @@ if __name__ == '__main__':
 
     get_friends_ids = functools.partial(make_twitter_request, t, t.friends.ids)
 
-    # Ditto if you want to do the same thing to get followers...
+    # XXX: Ditto if you want to do the same thing to get followers...
 
-    # getFollowerIds = functools.partial(make_twitter_request, t, t.followers.ids)
+    # get_followers_ids = functools.partial(make_twitter_request, t, t.followers.ids)
 
     cursor = -1
     ids = []
