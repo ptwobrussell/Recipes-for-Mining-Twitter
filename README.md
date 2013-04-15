@@ -1,12 +1,8 @@
 # Overview
 
-This repository contains code for the [21 Recipes for Mining Twitter](http://oreilly.com/catalog/0636920018261) (O'Reilly, 2011.) As the name of the title suggests, it's a short cookbook of recipes that's designed to help you solve common problems when working with Twitter data. Some of the recipes are extracted from content presented in [Mining the Social Web](http://amzn.to/d1Ci8A) while others are completely new additions. In either case, they're designed to be bite-sized and serve as the jetpack that you can strap onto that great Twitter mining idea you've been noodling on -- whether it's as simple as running some disposible scripts to crunch some numbers or as extensive as creating full-blown interactive web application.
+This repository contains code for the [21 Recipes for Mining Twitter](http://oreilly.com/catalog/0636920018261) (O'Reilly, 2011.) The code in this repository has been freshened to be compatible with Twitter's v1.1 API changes that affected nearly all of this book in mid-April 2013, but the text of the book has not been updated. If you benefit from the code in this repository, the best way to show your appreciation would be by liking the [Mining the Social Web](https://www.facebook.com/MiningTheSocialWeb) Facebook page, following [@SocialWebMining](http://twitter.com/socialwebmining) on Twitter, and pre-ordering _Mining the Social Web, 2nd Edition_ as soon as it's available. It's going to be a amazing book that will be a significant rewrite of the 1st Edition and will incorporate all of these recipes and many more in an expanded part of the book on Twitter.
 
-# Preview 21 Recipes for Mining Twitter
-
-You can preview the book [here](http://oreil.ly/gAWVtx) to make sure it's helpful to you before you make a purchase.
-
-# Marketing Description
+# Marketing Description for the Now Outdated 21 Recipes for Mining Twitter Book
 
 ![cover_art!](https://github.com/ptwobrussell/Recipes-for-Mining-Twitter/raw/master/cover_art.jpg)
 
@@ -20,9 +16,3 @@ Millions of public Twitter streams harbor a wealth of data, and once you mine th
 - Summarize webpages from short URLs
 
 This book is a perfect companion to [Mining the Social Web](http://amzn.to/d1Ci8A).
-
-# See Also
-
-- [Mining the Social Web (Amazon)](http://amzn.to/d1Ci8A)
-- [Mining the Social Web (GitHub)](http://bit.ly/biais2)
-- [Matthew Russell on Mining the Social Web](http://oreil.ly/gqmouW)
