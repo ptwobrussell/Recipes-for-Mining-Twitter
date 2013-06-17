@@ -1,18 +1,10 @@
 # Overview
 
-This repository contains code for the [21 Recipes for Mining Twitter](http://oreilly.com/catalog/0636920018261) (O'Reilly, 2011.) The code in this repository has been freshened to be compatible with Twitter's v1.1 API changes that affected nearly all of this book in mid-April 2013, but the text of the book has not been updated. If you benefit from the code in this repository, the best way to show your appreciation would be by liking the [Mining the Social Web](https://www.facebook.com/MiningTheSocialWeb) Facebook page, following [@SocialWebMining](http://twitter.com/socialwebmining) on Twitter, and pre-ordering _Mining the Social Web, 2nd Edition_ as soon as it's available. It's going to be a amazing book that will be a significant rewrite of the 1st Edition and will incorporate all of these recipes and many more in an expanded part of the book on Twitter.
+This repository contains code for the now defunct [21 Recipes for Mining Twitter](http://oreilly.com/catalog/0636920018261) (O'Reilly, 2011) book. The content from this book and its source code has been absorbed into [Mining the Social Web, 2nd Edition](http://bit.ly/135dHfs) (O'Reilly, 2013), which has its own [GitHub repository](https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition) maintained by the same author.
 
-# Marketing Description for the Now Outdated 21 Recipes for Mining Twitter Book
+Although code in this repository has been freshened to be compatible with Twitter's v1.1 API changes as of mid-April 2013 and should be functional for you to use, the code in this repository will not be maintained moving forward. This repository is left here only for continuity and will likely be deleted at the end of 2013. Moving forward, it is highly recommended that you reference [Mining the Social Web, 2nd Edition](http://bit.ly/135dHfs) and its updated/maintained GitHub repository.
 
-![cover_art!](https://github.com/ptwobrussell/Recipes-for-Mining-Twitter/raw/master/cover_art.jpg)
-
-Millions of public Twitter streams harbor a wealth of data, and once you mine them, you can gain some valuable insights. This short and concise book offers a collection of recipes to help you extract nuggets of Twitter information using easy-to-learn Python tools. Each recipe offers a discussion of how and why the solution works, so you can quickly adapt it to fit your particular needs. The recipes include techniques to:
-
-- Use OAuth to access Twitter data
-- Create and analyze graphs of retweet relationships
-- Use the streaming API to harvest tweets in realtime
-- Harvest and analyze friends and followers
-- Discover friendship cliques
-- Summarize webpages from short URLs
-
-This book is a perfect companion to [Mining the Social Web](http://amzn.to/d1Ci8A).
+Comments and feedback are welcome:
+* [@SocialWebMining](http://twitter.com/socialwebmining)
+* http://facebook.com/MiningTheSocialWeb
+* [Mining the Social Web, 2nd Edition - Issue Tracker](https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/issues)
