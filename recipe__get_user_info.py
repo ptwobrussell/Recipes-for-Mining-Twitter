@@ -31,7 +31,7 @@ def get_info_by_id(t, ids):
         for user_info in response:
             id_to_info[user_info['id']] = user_info
 
-        return id_to_info
+    return id_to_info
 
 # Similarly, you could resolve the same information by screen name 
 # using code that's virtually identical. These two functions
@@ -61,7 +61,7 @@ def get_info_by_screen_name(t, screen_names):
         for user_info in response:
             sn_to_info[user_info['screen_name']] = user_info
 
-        return sn_to_info
+    return sn_to_info
 
 if __name__ == '__main__':
 
